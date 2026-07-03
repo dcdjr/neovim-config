@@ -12,7 +12,7 @@ end
 
 map({ "n", "v" }, "<Space>", "<Nop>", "Leader")
 
--- Helper functions for terminals
+-- Terminal helpers
 local function open_horizontal_terminal()
   vim.cmd("belowright split")
   vim.cmd("resize 12")
@@ -27,18 +27,20 @@ local function open_vertical_terminal()
   vim.cmd("startinsert")
 end
 
--- Better window navigation
+-- Window navigation
 map("n", "<C-h>", "<C-w>h", "Move to left window")
 map("n", "<C-j>", "<C-w>j", "Move to lower window")
 map("n", "<C-k>", "<C-w>k", "Move to upper window")
 map("n", "<C-l>", "<C-w>l", "Move to right window")
 
+-- Center after page movement
 map("n", "<C-d>", "<C-d>zz", "Page down and center")
 map("n", "<C-u>", "<C-u>zz", "Page up and center")
 
--- Better terminal shortcuts
+-- Terminal shortcuts
 map("n", "<leader>t", open_horizontal_terminal, "Open horizontal terminal")
 map("n", "<leader>T", open_vertical_terminal, "Open vertical terminal")
+map("n", "<leader>tc", "<cmd>close<CR>", "Close terminal window")
 
 -- Basic file/buffer actions
 map("n", "<leader>w", "<cmd>w<CR>", "Write file")
@@ -51,12 +53,14 @@ map("n", "<C-Down>", "<cmd>resize -1<CR>", "Decrease window height")
 map("n", "<C-Left>", "<cmd>vertical resize -1<CR>", "Decrease window width")
 map("n", "<C-Right>", "<cmd>vertical resize +1<CR>", "Increase window width")
 
--- Navigate buffers
+-- Buffer navigation
 map("n", "<S-l>", "<cmd>bnext<CR>", "Next buffer")
 map("n", "<S-h>", "<cmd>bprevious<CR>", "Previous buffer")
 
+-- Disable annoying Ex mode
 map("n", "Q", "<nop>", "Disable Ex mode")
 
+-- Toggles
 map("n", "<leader>uw", function()
   vim.wo.wrap = not vim.wo.wrap
   vim.notify("Wrap " .. (vim.wo.wrap and "enabled" or "disabled"))
@@ -72,32 +76,27 @@ map("n", "<leader>uh", function()
   vim.notify("Search highlight " .. (vim.o.hlsearch and "enabled" or "disabled"))
 end, "Toggle search highlight")
 
+map("n", "<leader>uM", "<cmd>%s/\\r//g<CR>", "Remove carriage returns")
 map("n", "<Esc>", "<cmd>nohlsearch<CR>", "Clear search highlight")
 
--- Press jk fast to exit insert mode
-map("i", "jk", "<ESC>", "Exit insert mode")
+-- Press jk quickly to exit insert mode
+map("i", "jk", "<Esc>", "Exit insert mode")
 
--- Move text up and down
+-- Move text up/down and paste without yanking replaced text
 map("v", "<A-j>", ":m .+1<CR>==", "Move selection down")
 map("v", "<A-k>", ":m .-2<CR>==", "Move selection up")
 map("v", "p", '"_dP', "Paste without yanking")
 
--- Move text up and down
 map("x", "J", ":move '>+1<CR>gv=gv", "Move block down")
 map("x", "K", ":move '<-2<CR>gv=gv", "Move block up")
 map("x", "<A-j>", ":move '>+1<CR>gv=gv", "Move block down")
 map("x", "<A-k>", ":move '<-2<CR>gv=gv", "Move block up")
 map("x", "p", '"_dP', "Paste without yanking")
 
--- Better terminal navigation
+-- Terminal navigation
 map("t", "<C-h>", "<C-\\><C-N><C-w>h", "Move to left window")
 map("t", "<C-j>", "<C-\\><C-N><C-w>j", "Move to lower window")
 map("t", "<C-k>", "<C-\\><C-N><C-w>k", "Move to upper window")
 map("t", "<C-l>", "<C-\\><C-N><C-w>l", "Move to right window")
-
--- Exit terminal mode
 map("t", "jk", "<C-\\><C-N>", "Exit terminal mode")
 map("t", "<Esc>", "<C-\\><C-N>", "Exit terminal mode")
-
--- Close terminal window quickly after leaving terminal mode
-map("n", "<leader>tc", "<cmd>close<CR>", "Close terminal window")

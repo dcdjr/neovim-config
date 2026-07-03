@@ -1,23 +1,70 @@
-# Neovim Config
+# nvim-clean-start
 
-Small, custom Neovim setup using `lazy.nvim`, LSP, completion, Telescope, Treesitter, `nvim-tree`, Git signs, and safe format-on-save.
+A deliberately small Neovim config for WezTerm + WSL.
 
-## Requirements
+## What this includes
 
-- Neovim 0.11+; 0.12+ is recommended for the current LSP APIs.
-- `git` for plugin installation and Git-aware Telescope/Gitsigns features.
-- `ripgrep` (`rg`) for Telescope live grep.
-- `7z` or `unzip` so Mason can extract packages reliably on Windows.
-- `node`/`npm` for Mason-managed web, JSON, YAML, TypeScript, and Pyright language servers.
-- A JDK for Java language-server support.
-- Optional formatter executables for `conform.nvim`: `stylua`, `prettier`, `black`, `clang-format`, and `google-java-format`.
-- Treesitter parser installs are explicit to avoid noisy startup failures. Use `:TSInstall c cpp css html java javascript json lua markdown markdown_inline matlab python vim vimdoc query tsx typescript yaml`.
+- No plugins
+- Your existing core keybinds
+- Transparent-ish UI so WezTerm's Catppuccin/Mica setup shows through
+- 2-space default indentation
+- 4-space C/C++ and Python indentation
+- corrected autocmds so switching buffers does not reset C++/Python indentation
+- Terminal split helpers
+- No autoformat-on-save
+- No autopairs
+- No LSP
+- No completion
+- No Telescope
+- No file tree
 
-## Useful Commands
+This is the base layer. Add tools one at a time.
 
-- `:Lazy` manages plugins.
-- `:Mason` manages language servers.
-- `:ConformInfo` shows formatter status.
-- `:FormatDisable`, `:FormatEnable`, and `:FormatToggle` control format-on-save.
+## Install
 
-Use `!` with the format commands for global scope, for example `:FormatDisable!`. Without `!`, they apply to the current buffer.
+Backup your current config first:
+
+```bash
+mv ~/.config/nvim ~/.config/nvim.bak.$(date +%Y%m%d-%H%M%S)
+mkdir -p ~/.config
+cp -r nvim-clean-start ~/.config/nvim
+```
+
+Then open Neovim:
+
+```bash
+nvim
+```
+
+## Preserved core keybinds
+
+- `<C-h/j/k/l>`: move between windows
+- `<C-d>` / `<C-u>`: page down/up and center
+- `<leader>t`: horizontal terminal
+- `<leader>T`: vertical terminal
+- `<leader>tc`: close terminal window
+- `<leader>w`: write file
+- `<leader>q`: quit window
+- `<leader>x`: delete buffer
+- `<C-Up/Down/Left/Right>`: resize windows
+- `<S-h>` / `<S-l>`: previous/next buffer
+- `<leader>uw`: toggle wrap
+- `<leader>ur`: toggle relative numbers
+- `<leader>uh`: toggle search highlight
+- `<leader>uM`: remove Windows `^M` carriage returns
+- `<Esc>`: clear search highlight
+- `jk`: exit insert or terminal mode
+- visual `<A-j>/<A-k>`: move selected text
+- visual `p`: paste without yanking replaced text
+
+## Recommended plugin order
+
+Add these only when the base config feels stable:
+
+1. lazy.nvim + Catppuccin
+2. Telescope
+3. Treesitter
+4. LSP + completion
+5. Gitsigns
+6. Formatting
+7. File tree, only if you still want it

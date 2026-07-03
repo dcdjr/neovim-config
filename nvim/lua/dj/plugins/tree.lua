@@ -1,7 +1,11 @@
 return {
   "nvim-tree/nvim-tree.lua",
   version = "*",
-  lazy = false,
+  cmd = {
+    "NvimTreeToggle",
+    "NvimTreeFocus",
+    "NvimTreeFindFile",
+  },
   keys = {
     {
       "<leader>e",
@@ -12,15 +16,12 @@ return {
   dependencies = {
     "nvim-tree/nvim-web-devicons",
   },
+
   config = function()
     local api = require("nvim-tree.api")
 
     local function on_attach(bufnr)
-      if api.map and api.map.on_attach and api.map.on_attach.default then
-        api.map.on_attach.default(bufnr)
-      elseif api.config and api.config.mappings and api.config.mappings.default_on_attach then
-        api.config.mappings.default_on_attach(bufnr)
-      end
+      api.config.mappings.default_on_attach(bufnr)
 
       local function opts(desc)
         return {
@@ -32,36 +33,32 @@ return {
         }
       end
 
-      local function map(lhs, rhs, desc)
-        if rhs then
-          vim.keymap.set("n", lhs, rhs, opts(desc))
-        end
-      end
-
-      map("?", api.tree.toggle_help, "Help")
-      map("l", api.node.open.edit, "Open")
-      map("h", api.node.navigate.parent_close, "Close directory")
-      map("v", api.node.open.vertical, "Open vertical split")
-      map("s", api.node.open.horizontal, "Open horizontal split")
+      vim.keymap.set("n", "l", api.node.open.edit, opts("Open"))
+      vim.keymap.set("n", "h", api.node.navigate.parent_close, opts("Close directory"))
+      vim.keymap.set("n", "v", api.node.open.vertical, opts("Open vertical split"))
+      vim.keymap.set("n", "s", api.node.open.horizontal, opts("Open horizontal split"))
+      vim.keymap.set("n", "?", api.tree.toggle_help, opts("Help"))
     end
 
     require("nvim-tree").setup({
       on_attach = on_attach,
+
       sync_root_with_cwd = true,
       respect_buf_cwd = true,
+
       update_focused_file = {
         enable = true,
-        update_root = {
-          enable = true,
-        },
+        update_root = true,
       },
+
       view = {
         width = 32,
         preserve_window_proportions = true,
       },
+
       renderer = {
         group_empty = true,
-        highlight_git = "name",
+        highlight_git = true,
         indent_markers = {
           enable = true,
         },
@@ -74,25 +71,19 @@ return {
           },
         },
       },
+
       filters = {
         dotfiles = false,
         custom = { "^.git$" },
       },
+
       git = {
         enable = true,
         ignore = false,
       },
+
       filesystem_watchers = {
         enable = false,
-      },
-      actions = {
-        open_file = {
-          quit_on_open = false,
-          resize_window = true,
-          window_picker = {
-            enable = true,
-          },
-        },
       },
     })
   end,
